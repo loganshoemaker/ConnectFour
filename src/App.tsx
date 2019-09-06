@@ -1,7 +1,6 @@
 import React from "react";
 import "./App.css";
 import Board from "./Board";
-import { any } from "prop-types";
 
 // Use hooks
 // Use typescript
