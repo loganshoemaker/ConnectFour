@@ -27,10 +27,10 @@ const Board: React.FC = () => {
     player: string;
   }
 
-  const initialBoard: Array<Array<Tile>> = Array(6)
+  const initialBoard: Array<Array<Tile>> = Array(7)
     .fill(null)
     .map((_column: any) =>
-      Array(7).fill({
+      Array(6).fill({
         player: "OPEN"
       })
     );
@@ -45,36 +45,46 @@ const Board: React.FC = () => {
     toggleCurrentPlayer1(currentPlayer === "player1" ? "player2" : "player1");
   };
 
+  const colorTile = (player: string) => {
+    if (player === "player1") {
+      return "blue";
+    }
+    if (player === "player2") {
+      return "red";
+    }
+    return "none";
+  };
+
   // onClick of tile will send rowIndex and columnIndex to update places via hook
   return (
     <div>
       <h1>{currentPlayer}</h1>
-      {places.map((row, rowIndex) => {
+      {places.map((column, columnIndex) => {
         return (
           <div
-            key={`row${rowIndex}`}
+            key={`row${columnIndex}`}
             style={{
-              display: "block"
+              display: "inline-block"
             }}
           >
-            {row.map((column: Tile, columnIndex: number) => {
+            {column.map((row: Tile, rowIndex: number) => {
               return (
                 <div
                   onClick={() =>
-                    column.player === "OPEN" &&
-                    handleTileClick(rowIndex, columnIndex)
+                    row.player === "OPEN" &&
+                    handleTileClick(columnIndex, rowIndex)
                   }
-                  key={`Tile${columnIndex}`}
+                  key={`Tile${rowIndex}`}
                   style={{
-                    display: "inline-block",
                     width: "75px",
                     height: "75px",
-                    border: "1px solid black"
+                    border: "1px solid black",
+                    backgroundColor: colorTile(row.player)
                   }}
                 >
-                  {column.player}
+                  {row.player}
                   <br />
-                  {columnIndex}
+                  {rowIndex}
                 </div>
               );
             })}
