@@ -38,11 +38,24 @@ const Board: React.FC = () => {
   const [currentPlayer, toggleCurrentPlayer1] = useState("player1");
   const [places, updatePlaces] = useState(initialBoard);
 
-  const handleTileClick = (rowIndex: number, columnIndex: number) => {
+  const handleTileClick = (columnIndex: number) => {
     const newPlaces = [...places];
-    newPlaces[rowIndex][columnIndex] = { player: currentPlayer };
-    updatePlaces(newPlaces);
-    toggleCurrentPlayer1(currentPlayer === "player1" ? "player2" : "player1");
+
+    const findLastOpenTile = (column: Array<Tile>) => {
+      column.reverse();
+      const lastTileIndex = column.findIndex(tile => tile.player === "OPEN");
+      if (lastTileIndex >= 0) {
+        column[lastTileIndex] = { player: currentPlayer };
+      }
+      column.reverse();
+      return column;
+    };
+
+    if (newPlaces[columnIndex].find(tile => tile.player === "OPEN")) {
+      newPlaces[columnIndex] = findLastOpenTile(newPlaces[columnIndex]);
+      updatePlaces(newPlaces);
+      toggleCurrentPlayer1(currentPlayer === "player1" ? "player2" : "player1");
+    }
   };
 
   const colorTile = (player: string) => {
@@ -62,6 +75,10 @@ const Board: React.FC = () => {
       {places.map((column, columnIndex) => {
         return (
           <div
+            onClick={() =>
+              // row.player === "OPEN" &&
+              handleTileClick(columnIndex)
+            }
             key={`row${columnIndex}`}
             style={{
               display: "inline-block"
@@ -70,10 +87,6 @@ const Board: React.FC = () => {
             {column.map((row: Tile, rowIndex: number) => {
               return (
                 <div
-                  onClick={() =>
-                    row.player === "OPEN" &&
-                    handleTileClick(columnIndex, rowIndex)
-                  }
                   key={`Tile${rowIndex}`}
                   style={{
                     width: "75px",
