@@ -1,191 +1,36 @@
 import React, { useState } from "react";
 import "./App.css";
-
-// Use hooks
-// Write tests
-// Allow users to change their player name
-/*
-
-  TODO: method(s?) (hook?) to calculate state of board (after x turns?)
-
-  */
-
-/*
-
-  TODO: separate Tile functional component to present tile
-
-  */
-
-/*
-
-  TODO: option at start of game to allow users to pick their player name
-
-  */
+import TileInterface from "./interfaces/tileInterface";
+import Tile from "./components/Tile";
+import calculateArray from "./functions/calculateArray";
+import calculateHorizontal from "./functions/calculateHorizontal";
+import calculateDiagonallyDown from "./functions/calculateDiagonallyDown";
+import calculateDiagonallyUp from "./functions/calculateDiagonallyUp";
 
 const Board: React.FC = () => {
-  interface Tile {
-    player: string;
-  }
-
-  const initialBoard: Array<Array<Tile>> = Array(7)
+  const initialBoard: Array<Array<TileInterface>> = Array(7)
     .fill(null)
     .map((_column: any) => Array(6).fill({}));
   const [currentPlayer, toggleCurrentPlayer1] = useState("player1");
   const [places, updatePlaces] = useState(initialBoard);
   const [winner, setWinner] = useState("");
 
-  const calculateHorizontal = (newPlaces: Array<Array<Tile>>) => {
-    let indexToAdd = 0;
-    while (indexToAdd < 6) {
-      let newArray: Array<Tile> = [];
-      newPlaces.forEach(column => {
-        newArray.push(column[indexToAdd]);
-      });
-      indexToAdd++;
-      calculateArray(newArray);
-    }
-  };
-
-  const calculateDiagonalUp = (newPlaces: Array<Array<Tile>>) => {
-    let indexIncrement = 1;
-    let consecutiveTiles = 1;
-    for (const [columnIndex, column] of newPlaces.entries()) {
-      for (let [tileIndex, tile] of column.entries()) {
-        if (
-          tile.player &&
-          newPlaces[columnIndex + indexIncrement] &&
-          newPlaces[columnIndex + indexIncrement][tileIndex + indexIncrement]
-        ) {
-          if (
-            newPlaces[columnIndex + indexIncrement][tileIndex + indexIncrement]
-              .player === tile.player
-          ) {
-            consecutiveTiles++;
-            indexIncrement++;
-            if (
-              newPlaces[columnIndex + indexIncrement] &&
-              newPlaces[columnIndex + indexIncrement][
-                tileIndex + indexIncrement
-              ]
-            ) {
-              if (
-                newPlaces[columnIndex + indexIncrement][
-                  tileIndex + indexIncrement
-                ].player === tile.player
-              ) {
-                consecutiveTiles++;
-                indexIncrement++;
-                if (
-                  newPlaces[columnIndex + indexIncrement] &&
-                  newPlaces[columnIndex + indexIncrement][
-                    tileIndex + indexIncrement
-                  ]
-                ) {
-                  if (
-                    newPlaces[columnIndex + indexIncrement][
-                      tileIndex + indexIncrement
-                    ].player === tile.player
-                  ) {
-                    setWinner(currentPlayer);
-                    break;
-                  }
-                }
-              }
-            }
-          } else {
-            consecutiveTiles = 1;
-            indexIncrement = 1;
-          }
-        }
-      }
-    }
-  };
-
-  const calculateDiagonalDown = (newPlaces: Array<Array<Tile>>) => {
-    let indexIncrement = 1;
-    let consecutiveTiles = 1;
-    for (const [columnIndex, column] of newPlaces.entries()) {
-      for (let [tileIndex, tile] of column.entries()) {
-        if (
-          tile.player &&
-          newPlaces[columnIndex + indexIncrement] &&
-          newPlaces[columnIndex + indexIncrement][tileIndex - indexIncrement]
-        ) {
-          if (
-            newPlaces[columnIndex + indexIncrement][tileIndex - indexIncrement]
-              .player === tile.player
-          ) {
-            consecutiveTiles++;
-            indexIncrement++;
-            if (
-              newPlaces[columnIndex + indexIncrement] &&
-              newPlaces[columnIndex + indexIncrement][
-                tileIndex - indexIncrement
-              ]
-            ) {
-              if (
-                newPlaces[columnIndex + indexIncrement][
-                  tileIndex - indexIncrement
-                ].player === tile.player
-              ) {
-                consecutiveTiles++;
-                indexIncrement++;
-                if (
-                  newPlaces[columnIndex + indexIncrement] &&
-                  newPlaces[columnIndex + indexIncrement][
-                    tileIndex - indexIncrement
-                  ]
-                ) {
-                  if (
-                    newPlaces[columnIndex + indexIncrement][
-                      tileIndex - indexIncrement
-                    ].player === tile.player
-                  ) {
-                    setWinner(currentPlayer);
-                    break;
-                  }
-                }
-              }
-            }
-          }
-        } else {
-          consecutiveTiles = 1;
-          indexIncrement = 1;
-        }
-      }
-    }
-  };
-
-  const calculateArray = (column: Array<Tile>) => {
-    let consecutiveTiles = 1;
-    let indexIncrement = 1;
-    for (let [index, tile] of column.entries()) {
-      for (let [compareIndex, tileToCompare] of column.entries()) {
-        if (compareIndex === index + indexIncrement) {
-          if (
-            tile.player &&
-            tileToCompare.player &&
-            tile.player === tileToCompare.player
-          ) {
-            indexIncrement++;
-            consecutiveTiles++;
-          } else {
-            consecutiveTiles = 1;
-            indexIncrement = 1;
-          }
-        }
-        if (consecutiveTiles === 4) {
-          setWinner(currentPlayer);
-          break;
-        }
-      }
-    }
+  const checkBoard = (
+    columnIndex: number,
+    newPlaces: Array<Array<TileInterface>>
+  ) => {
+    let weHaveAWinner;
+    if (calculateArray(newPlaces[columnIndex])) weHaveAWinner = true;
+    if (calculateHorizontal(newPlaces)) weHaveAWinner = true;
+    if (calculateDiagonallyUp(newPlaces)) weHaveAWinner = true;
+    if (calculateDiagonallyDown(newPlaces)) weHaveAWinner = true;
+    return weHaveAWinner;
   };
 
   const handleTileClick = (columnIndex: number) => {
     const newPlaces = [...places];
 
-    const findLastOpenTile = (column: Array<Tile>) => {
+    const findLastOpenTile = (column: Array<TileInterface>) => {
       column.reverse();
       const lastTileIndex = column.findIndex(tile => !tile.player);
       if (lastTileIndex >= 0) {
@@ -197,10 +42,10 @@ const Board: React.FC = () => {
 
     newPlaces[columnIndex] = findLastOpenTile(newPlaces[columnIndex]);
     updatePlaces(newPlaces);
-    calculateArray(newPlaces[columnIndex]);
-    calculateHorizontal(newPlaces);
-    calculateDiagonalUp(newPlaces);
-    calculateDiagonalDown(newPlaces);
+
+    if (checkBoard(columnIndex, newPlaces)) {
+      setWinner(currentPlayer);
+    }
     toggleCurrentPlayer1(currentPlayer === "player1" ? "player2" : "player1");
   };
 
@@ -228,21 +73,14 @@ const Board: React.FC = () => {
               display: "inline-block"
             }}
           >
-            {column.map((row: Tile, rowIndex: number) => {
+            {column.map((row: TileInterface, rowIndex: number) => {
               return (
-                <div
+                <Tile
+                  colorTile={() => colorTile(row.player)}
+                  order={rowIndex}
                   key={`Tile${rowIndex}`}
-                  style={{
-                    width: "75px",
-                    height: "75px",
-                    border: "1px solid black",
-                    backgroundColor: colorTile(row.player)
-                  }}
-                >
-                  {row.player}
-                  <br />
-                  {rowIndex}
-                </div>
+                  player={row.player}
+                />
               );
             })}
           </div>
