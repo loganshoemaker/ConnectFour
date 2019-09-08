@@ -34,21 +34,35 @@ const Board: React.FC = () => {
   const [places, updatePlaces] = useState(initialBoard);
   const [winner, setWinner] = useState("");
 
+  const calculateHorizontal = (newPlaces: Array<Array<Tile>>) => {
+    let indexToAdd = 0;
+    while (indexToAdd < 6) {
+      let newArray: Array<Tile> = [];
+      newPlaces.forEach(column => {
+        newArray.push(column[indexToAdd]);
+      });
+      indexToAdd++;
+      calculateVertical(newArray);
+    }
+  };
+
   const calculateVertical = (column: Array<Tile>) => {
     let consecutiveTiles = 0;
-    let arrayToCalculate = column.filter(tile => tile.player);
-    if (arrayToCalculate.length >= 4) {
-      let indexToCheck = 0;
-      for (let tileToCompare of arrayToCalculate) {
-        if (tileToCompare.player === arrayToCalculate[indexToCheck].player) {
-          consecutiveTiles++;
-        } else {
-          consecutiveTiles = 0;
-        }
-        if (consecutiveTiles === 4) {
-          setWinner(currentPlayer);
-          break;
-        }
+    let indexToCheck = 0;
+    for (let tileToCompare of column) {
+      if (
+        tileToCompare.player &&
+        column[indexToCheck].player &&
+        tileToCompare.player === column[indexToCheck].player
+      ) {
+        consecutiveTiles++;
+      } else {
+        consecutiveTiles = 0;
+      }
+      indexToCheck++;
+      if (consecutiveTiles === 4) {
+        setWinner(currentPlayer);
+        break;
       }
     }
   };
@@ -70,6 +84,7 @@ const Board: React.FC = () => {
       newPlaces[columnIndex] = findLastOpenTile(newPlaces[columnIndex]);
       updatePlaces(newPlaces);
       calculateVertical(newPlaces[columnIndex]);
+      calculateHorizontal(newPlaces);
       toggleCurrentPlayer1(currentPlayer === "player1" ? "player2" : "player1");
     }
   };
@@ -84,7 +99,7 @@ const Board: React.FC = () => {
     return "none";
   };
 
-  if (winner) console.log("winner: ", winner);
+  if (winner) console.log(`${winner} wins!`);
 
   return (
     <div>
@@ -92,7 +107,7 @@ const Board: React.FC = () => {
       {places.map((column, columnIndex) => {
         return (
           <div
-            onClick={() => handleTileClick(columnIndex)}
+            onClick={() => winner === "" && handleTileClick(columnIndex)}
             key={`row${columnIndex}`}
             style={{
               display: "inline-block"
