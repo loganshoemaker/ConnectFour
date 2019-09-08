@@ -42,27 +42,142 @@ const Board: React.FC = () => {
         newArray.push(column[indexToAdd]);
       });
       indexToAdd++;
-      calculateVertical(newArray);
+      calculateArray(newArray);
     }
   };
 
-  const calculateVertical = (column: Array<Tile>) => {
-    let consecutiveTiles = 0;
-    let indexToCheck = 0;
-    for (let tileToCompare of column) {
-      if (
-        tileToCompare.player &&
-        column[indexToCheck].player &&
-        tileToCompare.player === column[indexToCheck].player
-      ) {
-        consecutiveTiles++;
-      } else {
-        consecutiveTiles = 0;
+  const calculateDiagonalUp = (newPlaces: Array<Array<Tile>>) => {
+    let indexIncrement = 1;
+    let consecutiveTiles = 1;
+    for (const [columnIndex, column] of newPlaces.entries()) {
+      for (let [tileIndex, tile] of column.entries()) {
+        if (
+          tile.player &&
+          newPlaces[columnIndex + indexIncrement] &&
+          newPlaces[columnIndex + indexIncrement][tileIndex + indexIncrement]
+        ) {
+          if (
+            newPlaces[columnIndex + indexIncrement][tileIndex + indexIncrement]
+              .player === tile.player
+          ) {
+            consecutiveTiles++;
+            indexIncrement++;
+            if (
+              newPlaces[columnIndex + indexIncrement] &&
+              newPlaces[columnIndex + indexIncrement][
+                tileIndex + indexIncrement
+              ]
+            ) {
+              if (
+                newPlaces[columnIndex + indexIncrement][
+                  tileIndex + indexIncrement
+                ].player === tile.player
+              ) {
+                consecutiveTiles++;
+                indexIncrement++;
+                if (
+                  newPlaces[columnIndex + indexIncrement] &&
+                  newPlaces[columnIndex + indexIncrement][
+                    tileIndex + indexIncrement
+                  ]
+                ) {
+                  if (
+                    newPlaces[columnIndex + indexIncrement][
+                      tileIndex + indexIncrement
+                    ].player === tile.player
+                  ) {
+                    setWinner(currentPlayer);
+                    break;
+                  }
+                }
+              }
+            }
+          } else {
+            consecutiveTiles = 1;
+            indexIncrement = 1;
+          }
+        }
       }
-      indexToCheck++;
-      if (consecutiveTiles === 4) {
-        setWinner(currentPlayer);
-        break;
+    }
+  };
+
+  const calculateDiagonalDown = (newPlaces: Array<Array<Tile>>) => {
+    let indexIncrement = 1;
+    let consecutiveTiles = 1;
+    for (const [columnIndex, column] of newPlaces.entries()) {
+      for (let [tileIndex, tile] of column.entries()) {
+        if (
+          tile.player &&
+          newPlaces[columnIndex + indexIncrement] &&
+          newPlaces[columnIndex + indexIncrement][tileIndex - indexIncrement]
+        ) {
+          if (
+            newPlaces[columnIndex + indexIncrement][tileIndex - indexIncrement]
+              .player === tile.player
+          ) {
+            consecutiveTiles++;
+            indexIncrement++;
+            if (
+              newPlaces[columnIndex + indexIncrement] &&
+              newPlaces[columnIndex + indexIncrement][
+                tileIndex - indexIncrement
+              ]
+            ) {
+              if (
+                newPlaces[columnIndex + indexIncrement][
+                  tileIndex - indexIncrement
+                ].player === tile.player
+              ) {
+                consecutiveTiles++;
+                indexIncrement++;
+                if (
+                  newPlaces[columnIndex + indexIncrement] &&
+                  newPlaces[columnIndex + indexIncrement][
+                    tileIndex - indexIncrement
+                  ]
+                ) {
+                  if (
+                    newPlaces[columnIndex + indexIncrement][
+                      tileIndex - indexIncrement
+                    ].player === tile.player
+                  ) {
+                    setWinner(currentPlayer);
+                    break;
+                  }
+                }
+              }
+            }
+          }
+        } else {
+          consecutiveTiles = 1;
+          indexIncrement = 1;
+        }
+      }
+    }
+  };
+
+  const calculateArray = (column: Array<Tile>) => {
+    let consecutiveTiles = 1;
+    let indexIncrement = 1;
+    for (let [index, tile] of column.entries()) {
+      for (let [compareIndex, tileToCompare] of column.entries()) {
+        if (compareIndex === index + indexIncrement) {
+          if (
+            tile.player &&
+            tileToCompare.player &&
+            tile.player === tileToCompare.player
+          ) {
+            indexIncrement++;
+            consecutiveTiles++;
+          } else {
+            consecutiveTiles = 1;
+            indexIncrement = 1;
+          }
+        }
+        if (consecutiveTiles === 4) {
+          setWinner(currentPlayer);
+          break;
+        }
       }
     }
   };
@@ -80,13 +195,13 @@ const Board: React.FC = () => {
       return column;
     };
 
-    if (newPlaces[columnIndex].find(tile => !tile.player)) {
-      newPlaces[columnIndex] = findLastOpenTile(newPlaces[columnIndex]);
-      updatePlaces(newPlaces);
-      calculateVertical(newPlaces[columnIndex]);
-      calculateHorizontal(newPlaces);
-      toggleCurrentPlayer1(currentPlayer === "player1" ? "player2" : "player1");
-    }
+    newPlaces[columnIndex] = findLastOpenTile(newPlaces[columnIndex]);
+    updatePlaces(newPlaces);
+    calculateArray(newPlaces[columnIndex]);
+    calculateHorizontal(newPlaces);
+    calculateDiagonalUp(newPlaces);
+    calculateDiagonalDown(newPlaces);
+    toggleCurrentPlayer1(currentPlayer === "player1" ? "player2" : "player1");
   };
 
   const colorTile = (player: string) => {
