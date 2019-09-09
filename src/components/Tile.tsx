@@ -4,10 +4,8 @@ import { tileProps } from "../interfaces";
 const Tile: React.SFC<tileProps> = props => {
   return (
     <div
+      className="gameTile"
       style={{
-        width: "75px",
-        height: "75px",
-        border: "1px solid black",
         backgroundColor: props.colorTile(props.player)
       }}
     />

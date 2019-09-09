@@ -23,6 +23,25 @@
   color: #61dafb;
 }
 
+.board {
+  border: 12px solid blue;
+  background-color: yellow;
+  display: inline-block;
+}
+
+.boardColumn {
+  display: inline-block;
+  padding: 16px;
+}
+
+.gameTile {
+  width: 75px;
+  height: 75px;
+  margin: 8px 0;
+  background-color: gray;
+  border-radius: 50%;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

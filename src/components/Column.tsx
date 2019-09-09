@@ -5,12 +5,7 @@ import { colorTile } from "../functions";
 
 const Column: React.SFC<columnProps> = props => {
   return (
-    <div
-      onClick={() => props.onClick()}
-      style={{
-        display: "inline-block"
-      }}
-    >
+    <div className="boardColumn" onClick={() => props.onClick()}>
       {props.column.map((row, rowIndex) => {
         return (
           <Tile

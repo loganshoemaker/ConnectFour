@@ -58,15 +58,17 @@ const Board: React.FC = () => {
   return (
     <div>
       <h1>{currentPlayer} PLAYER - TAKE TURN</h1>
-      {places.map((column, columnIndex) => {
-        return (
-          <Column
-            column={column}
-            onClick={() => handleTurn(columnIndex)}
-            key={`row${columnIndex}`}
-          />
-        );
-      })}
+      <div className="board">
+        {places.map((column, columnIndex) => {
+          return (
+            <Column
+              column={column}
+              onClick={() => handleTurn(columnIndex)}
+              key={`row${columnIndex}`}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };

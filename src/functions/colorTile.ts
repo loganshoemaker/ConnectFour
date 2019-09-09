@@ -1,5 +1,5 @@
 const colorTile = (player: string) => {
-  return player;
+  return player || "white";
 };
 
 export default colorTile;
