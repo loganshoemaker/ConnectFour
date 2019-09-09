@@ -10,11 +10,7 @@ const Tile: React.SFC<TileProps> = props => {
         border: "1px solid black",
         backgroundColor: props.colorTile(props.player)
       }}
-    >
-      {props.player}
-      <br />
-      {props.order}
-    </div>
+    />
   );
 };
 

@@ -1,6 +1,6 @@
-import TileInterface from "../interfaces/tileInterface";
+import place from "../interfaces/place";
 
-const calculateDiagonallyUp = (newPlaces: Array<Array<TileInterface>>) => {
+const calculateDiagonallyUp = (newPlaces: Array<Array<place>>) => {
   let indexIncrement = 1;
   for (const [columnIndex, column] of newPlaces.entries()) {
     for (let [tileIndex, tile] of column.entries()) {
