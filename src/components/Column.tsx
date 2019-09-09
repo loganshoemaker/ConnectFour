@@ -10,7 +10,6 @@ const Column: React.SFC<columnProps> = props => {
         return (
           <Tile
             colorTile={() => colorTile(row.player)}
-            order={rowIndex}
             key={`Tile${rowIndex}`}
             player={row.player}
           />
