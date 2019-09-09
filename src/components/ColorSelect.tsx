@@ -1,7 +1,7 @@
 import * as React from "react";
-import ColorSelectProps from "../interfaces/ColorSelect";
+import { colorSelectProps } from "../interfaces";
 
-const ColorSelect: React.SFC<ColorSelectProps> = props => {
+const ColorSelect: React.SFC<colorSelectProps> = props => {
   return (
     <div>
       <h1>Player one, pick your color!</h1>
