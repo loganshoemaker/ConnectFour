@@ -1,6 +1,6 @@
-import TileInterface from "../interfaces/tileInterface";
+import place from "../interfaces/place";
 
-const calculateArray = (column: Array<TileInterface>) => {
+const calculateArray = (column: Array<place>) => {
   let consecutiveTiles = 1;
   let indexIncrement = 1;
   for (let [index, tile] of column.entries()) {
