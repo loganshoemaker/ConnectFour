@@ -10,12 +10,22 @@ const Board: React.FC = () => {
   const [places, updatePlaces] = useState(createBoard());
   const [result, setResult] = useState("");
 
+  const resetState = () => {
+    setPlayer1("");
+    setPlayer2("");
+    toggleCurrentPlayer("");
+    setResult("");
+    updatePlaces(createBoard());
+  };
+
   useEffect(() => {
     if (result.length && (result === player1 || result === player2)) {
       alert(`${result} wins!`);
+      resetState();
     }
     if (result === "draw") {
       alert("Tie game!");
+      resetState();
     }
   });
 
@@ -58,15 +68,17 @@ const Board: React.FC = () => {
   return (
     <div>
       <h1>{currentPlayer} PLAYER - TAKE TURN</h1>
-      {places.map((column, columnIndex) => {
-        return (
-          <Column
-            column={column}
-            onClick={() => handleTurn(columnIndex)}
-            key={`row${columnIndex}`}
-          />
-        );
-      })}
+      <div className="board">
+        {places.map((column, columnIndex) => {
+          return (
+            <Column
+              column={column}
+              onClick={() => handleTurn(columnIndex)}
+              key={`row${columnIndex}`}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };

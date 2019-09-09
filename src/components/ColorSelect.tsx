@@ -7,16 +7,20 @@ const ColorSelect: React.SFC<colorSelectProps> = props => {
       <h1>Player one, pick your color!</h1>
       <br />
       <button
+        className="buttonSelect"
         onClick={() =>
           props.setPlayerColors(props.colorOption1, props.colorOption2)
         }
+        style={{ backgroundColor: `${props.colorOption1}` }}
       >
         {props.colorOption1}
       </button>
       <button
+        className="buttonSelect"
         onClick={() =>
           props.setPlayerColors(props.colorOption2, props.colorOption1)
         }
+        style={{ backgroundColor: `${props.colorOption2}` }}
       >
         {props.colorOption2}
       </button>
