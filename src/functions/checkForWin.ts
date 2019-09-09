@@ -4,9 +4,12 @@ import {
   calculateDiagonallyDown,
   calculateDiagonallyUp
 } from ".";
-import { place } from "../interfaces";
+import { place } from "../models";
 
-const checkForWin = (columnIndex: number, places: Array<Array<place>>) => {
+export const checkForWin = (
+  columnIndex: number,
+  places: Array<Array<place>>
+) => {
   let weHaveAWinner;
   if (calculateArray(places[columnIndex])) weHaveAWinner = true;
   if (calculateHorizontal(places)) weHaveAWinner = true;
@@ -16,5 +19,3 @@ const checkForWin = (columnIndex: number, places: Array<Array<place>>) => {
     return weHaveAWinner;
   }
 };
-
-export default checkForWin;

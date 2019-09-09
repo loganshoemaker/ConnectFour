@@ -1,6 +1,6 @@
-import place from "../interfaces/place";
+import { place } from "../models";
 
-const calculateArray = (column: Array<place>) => {
+export const calculateArray = (column: Array<place>) => {
   let consecutiveTiles = 1;
   let indexIncrement = 1;
   for (let [index, tile] of column.entries()) {
@@ -25,5 +25,3 @@ const calculateArray = (column: Array<place>) => {
   }
   return false;
 };
-
-export default calculateArray;

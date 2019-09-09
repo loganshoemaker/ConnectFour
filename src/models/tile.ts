@@ -1,4 +1,4 @@
-export default interface tileProps {
+export interface tileProps {
   colorTile: any;
   player: string;
 }

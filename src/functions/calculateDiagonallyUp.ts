@@ -1,6 +1,6 @@
-import place from "../interfaces/place";
+import { place } from "../models/place";
 
-const calculateDiagonallyUp = (newPlaces: Array<Array<place>>) => {
+export const calculateDiagonallyUp = (newPlaces: Array<Array<place>>) => {
   let indexIncrement = 1;
   for (const [columnIndex, column] of newPlaces.entries()) {
     for (let [tileIndex, tile] of column.entries()) {
@@ -47,5 +47,3 @@ const calculateDiagonallyUp = (newPlaces: Array<Array<place>>) => {
     }
   }
 };
-
-export default calculateDiagonallyUp;

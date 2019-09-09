@@ -1,6 +1,6 @@
-import { place } from "../interfaces";
+import { place } from "../models";
 
-const checkForDraw = (places: Array<Array<place>>) => {
+export const checkForDraw = (places: Array<Array<place>>) => {
   let tieGame = true;
   places.forEach(column => {
     column.forEach(place => {
@@ -11,5 +11,3 @@ const checkForDraw = (places: Array<Array<place>>) => {
   });
   return tieGame;
 };
-
-export default checkForDraw;

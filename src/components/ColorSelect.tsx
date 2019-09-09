@@ -1,5 +1,5 @@
 import * as React from "react";
-import { colorSelectProps } from "../interfaces";
+import { colorSelectProps } from "../models";
 
 const ColorSelect: React.SFC<colorSelectProps> = props => {
   return (

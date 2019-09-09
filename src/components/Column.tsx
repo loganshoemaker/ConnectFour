@@ -1,5 +1,5 @@
 import * as React from "react";
-import { columnProps } from "../interfaces";
+import { columnProps } from "../models";
 import { Tile } from "./";
 import { colorTile } from "../functions";
 

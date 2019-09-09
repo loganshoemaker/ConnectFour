@@ -1,7 +1,7 @@
-import place from "../interfaces/place";
-import calculateArray from "./calculateArray";
+import { place } from "../models";
+import { calculateArray } from "./calculateArray";
 
-const calculateHorizontal = (newPlaces: Array<Array<place>>) => {
+export const calculateHorizontal = (newPlaces: Array<Array<place>>) => {
   let result;
   for (let indexToAdd = 0; indexToAdd < 6; indexToAdd++) {
     let newArray: Array<place> = [];
@@ -12,5 +12,3 @@ const calculateHorizontal = (newPlaces: Array<Array<place>>) => {
   }
   return result;
 };
-
-export default calculateHorizontal;

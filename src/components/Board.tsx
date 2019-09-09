@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { place } from "../interfaces";
+import { place } from "../models";
 import { Column, ColorSelect } from "./";
 import { checkForWin, checkForDraw, createBoard } from "../functions";
 

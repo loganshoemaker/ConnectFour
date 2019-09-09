@@ -1,5 +1,5 @@
 import * as React from "react";
-import { tileProps } from "../interfaces";
+import { tileProps } from "../models";
 
 const Tile: React.SFC<tileProps> = props => {
   return (

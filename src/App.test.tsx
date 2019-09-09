@@ -8,6 +8,7 @@ import {
   calculateDiagonallyUp,
   calculateDiagonallyDown
 } from "./functions";
+import { place } from "./models";
 
 it("App renders without crashing", () => {
   const div = document.createElement("div");
@@ -36,7 +37,10 @@ it("ColorSelect renders without crashing", () => {
 
 it("Column renders without crashing", () => {
   const div = document.createElement("div");
-  ReactDOM.render(<Column column={[[{}]]} />, div);
+  ReactDOM.render(
+    <Column onClick={() => {}} column={[{ player: "RED" }]} />,
+    div
+  );
   ReactDOM.unmountComponentAtNode(div);
 });
 
@@ -64,7 +68,7 @@ it("Calculate a vertical match", () => {
 });
 
 it("Calculates a horizontal match", () => {
-  const passingArray = [
+  const passingArray: Array<Array<place>> = [
     [{}, {}, {}, {}, {}, {}],
     [{}, {}, {}, {}, {}, { player: "red" }],
     [{}, {}, {}, {}, {}, { player: "red" }],
@@ -72,7 +76,7 @@ it("Calculates a horizontal match", () => {
     [{}, {}, {}, {}, {}, { player: "red" }],
     [{}, {}, {}, {}, {}, {}]
   ];
-  const failingArray = [
+  const failingArray: Array<Array<place>> = [
     [{}, {}, {}, {}, {}, {}],
     [{}, {}, {}, {}, {}, { player: "red" }],
     [{}, {}, {}, {}, {}, { player: "red" }],
@@ -85,7 +89,7 @@ it("Calculates a horizontal match", () => {
 });
 
 it("Calculates an upward diagonal match", () => {
-  const passingArray = [
+  const passingArray: Array<Array<place>> = [
     [{ player: "red" }, {}, {}, {}, {}, {}],
     [{}, { player: "red" }, {}, {}, {}, {}],
     [{}, {}, { player: "red" }, {}, {}, {}],
@@ -93,7 +97,7 @@ it("Calculates an upward diagonal match", () => {
     [{}, {}, {}, {}, {}, {}],
     [{}, {}, {}, {}, {}, {}]
   ];
-  const failingArray = [
+  const failingArray: Array<Array<place>> = [
     [{}, {}, {}, {}, {}, { player: "red" }],
     [{}, {}, {}, {}, { player: "red" }, {}],
     [{}, {}, {}, { player: "red" }, {}, {}],
@@ -107,7 +111,7 @@ it("Calculates an upward diagonal match", () => {
 });
 
 it("Calculates a downward diagonal match", () => {
-  const passingArray = [
+  const passingArray: Array<Array<place>> = [
     [{}, {}, {}, {}, {}, { player: "red" }],
     [{}, {}, {}, {}, { player: "red" }, {}],
     [{}, {}, {}, { player: "red" }, {}, {}],
@@ -115,7 +119,7 @@ it("Calculates a downward diagonal match", () => {
     [{}, {}, {}, {}, {}, {}],
     [{}, {}, {}, {}, {}, {}]
   ];
-  const failingArray = [
+  const failingArray: Array<Array<place>> = [
     [{ player: "red" }, {}, {}, {}, {}, {}],
     [{}, { player: "red" }, {}, {}, {}, {}],
     [{}, {}, { player: "red" }, {}, {}, {}],

@@ -1,19 +1,8 @@
-import calculateArray from "./calculateArray";
-import calculateHorizontal from "./calculateHorizontal";
-import calculateDiagonallyDown from "./calculateDiagonallyDown";
-import calculateDiagonallyUp from "./calculateDiagonallyUp";
-import colorTile from "./colorTile";
-import checkForDraw from "./checkForDraw";
-import checkForWin from "./checkForWin";
-import createBoard from "./createBoard";
-
-export {
-  calculateArray,
-  calculateHorizontal,
-  calculateDiagonallyDown,
-  calculateDiagonallyUp,
-  colorTile,
-  checkForDraw,
-  checkForWin,
-  createBoard
-};
+export { calculateArray } from "./calculateArray";
+export { calculateHorizontal } from "./calculateHorizontal";
+export { calculateDiagonallyDown } from "./calculateDiagonallyDown";
+export { calculateDiagonallyUp } from "./calculateDiagonallyUp";
+export { colorTile } from "./colorTile";
+export { checkForDraw } from "./checkForDraw";
+export { checkForWin } from "./checkForWin";
+export { createBoard } from "./createBoard";
