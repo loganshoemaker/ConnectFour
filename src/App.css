@@ -26,7 +26,19 @@
 .board {
   border: 12px solid #3477eb;
   background-color: #eedf30;
-  display: inline-block;
+  display: flexbox;
+  flex-direction: row;
+  max-width: 800px;
+  margin: auto;
+}
+
+.buttonSelect {
+  height: 50px;
+  margin: 16px;
+  width: 125px;
+  color: #fff;
+  border-radius: 8px;
+  border: none;
 }
 
 .boardColumn {
@@ -38,7 +50,6 @@
   width: 75px;
   height: 75px;
   margin: 8px 0;
-  background-color: #d8dbe2;
   border-radius: 50%;
 }
 
@@ -48,5 +59,53 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (max-width: 768px) {
+  .board {
+    display: inline-block;
+  }
+
+  .boardColumn {
+    padding: 4px;
+  }
+
+  .gameTile {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (max-width: 600px) {
+  .board {
+    display: inline-block;
+  }
+
+  .boardColumn {
+    padding: 3px;
+  }
+
+  .gameTile {
+    width: 33px;
+    height: 33px;
+  }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 300px) {
+  .board {
+    display: inline-block;
+  }
+
+  .boardColumn {
+    padding: 2px;
+  }
+
+  .gameTile {
+    width: 25px;
+    height: 25px;
   }
 }
