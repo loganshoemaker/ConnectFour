@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
-import place from "./interfaces/place";
-import { Tile, ColorSelect } from "./components";
+import place from "../interfaces/place";
+import { Tile, ColorSelect } from ".";
 import {
   calculateArray,
   calculateHorizontal,
@@ -9,15 +8,13 @@ import {
   calculateDiagonallyUp,
   colorTile,
   createBoard
-} from "./functions";
+} from "../functions";
 
 const Board: React.FC = () => {
-  const initialBoard: Array<Array<place>> = createBoard();
-
   const [currentPlayer, toggleCurrentPlayer] = useState("");
   const [player1, setPlayer1Color] = useState("");
   const [player2, setPlayer2Color] = useState("");
-  const [places, updatePlaces] = useState(initialBoard);
+  const [places, updatePlaces] = useState(createBoard());
   const [winner, setWinner] = useState("");
   useEffect(() => {
     if (winner.length) {
@@ -27,6 +24,7 @@ const Board: React.FC = () => {
 
   const setPlayerColors = (player1Color: string, player2Color: string) => {
     setPlayer1Color(player1Color);
+    toggleCurrentPlayer(player1Color);
     setPlayer2Color(player2Color);
   };
 
@@ -40,7 +38,7 @@ const Board: React.FC = () => {
   };
 
   const handleTileClick = (columnIndex: number) => {
-    const newPlaces = [...places];
+    toggleCurrentPlayer(currentPlayer === player1 ? player2 : player1);
     const findLastOpenTile = (column: Array<place>) => {
       column.reverse();
       const lastTileIndex = column.findIndex(tile => !tile.player);
@@ -50,12 +48,11 @@ const Board: React.FC = () => {
       column.reverse();
       return column;
     };
-    newPlaces[columnIndex] = findLastOpenTile(newPlaces[columnIndex]);
-    updatePlaces(newPlaces);
-    if (checkBoard(columnIndex, newPlaces)) {
+    places[columnIndex] = findLastOpenTile(places[columnIndex]);
+    updatePlaces(places);
+    if (checkBoard(columnIndex, places)) {
       setWinner(currentPlayer);
     }
-    toggleCurrentPlayer(currentPlayer === player1 ? player2 : player1);
   };
 
   if (!player1.length) {
@@ -70,10 +67,11 @@ const Board: React.FC = () => {
 
   return (
     <div>
+      <h1>{currentPlayer} PLAYER - TAKE TURN</h1>
       {places.map((column, columnIndex) => {
         return (
           <div
-            onClick={() => winner === "" && handleTileClick(columnIndex)}
+            onClick={() => !winner.length && handleTileClick(columnIndex)}
             key={`row${columnIndex}`}
             style={{
               display: "inline-block"

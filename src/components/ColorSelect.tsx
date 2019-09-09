@@ -11,14 +11,14 @@ const ColorSelect: React.SFC<ColorSelectProps> = props => {
           props.setPlayerColors(props.colorOption1, props.colorOption2)
         }
       >
-        RED
+        {props.colorOption1}
       </button>
       <button
         onClick={() =>
           props.setPlayerColors(props.colorOption2, props.colorOption1)
         }
       >
-        BLACK
+        {props.colorOption2}
       </button>
     </div>
   );
