@@ -10,12 +10,22 @@ const Board: React.FC = () => {
   const [places, updatePlaces] = useState(createBoard());
   const [result, setResult] = useState("");
 
+  const resetState = () => {
+    setPlayer1("");
+    setPlayer2("");
+    toggleCurrentPlayer("");
+    setResult("");
+    updatePlaces(createBoard());
+  };
+
   useEffect(() => {
     if (result.length && (result === player1 || result === player2)) {
       alert(`${result} wins!`);
+      resetState();
     }
     if (result === "draw") {
       alert("Tie game!");
+      resetState();
     }
   });
 

@@ -24,8 +24,8 @@
 }
 
 .board {
-  border: 12px solid blue;
-  background-color: yellow;
+  border: 12px solid #3477eb;
+  background-color: #eedf30;
   display: inline-block;
 }
 
@@ -38,7 +38,7 @@
   width: 75px;
   height: 75px;
   margin: 8px 0;
-  background-color: gray;
+  background-color: #d8dbe2;
   border-radius: 50%;
 }
 
