@@ -1,7 +1,7 @@
 import * as React from "react";
-import TileProps from "../interfaces/TileProps";
+import { tileProps } from "../interfaces";
 
-const Tile: React.SFC<TileProps> = props => {
+const Tile: React.SFC<tileProps> = props => {
   return (
     <div
       style={{
