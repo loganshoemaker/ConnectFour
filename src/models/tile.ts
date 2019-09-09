@@ -1,4 +1,4 @@
 export interface tileProps {
   colorTile: any;
-  player: string;
+  player?: string;
 }
