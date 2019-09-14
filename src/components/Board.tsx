@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Column, ColorSelect } from "./";
-import { createBoard, updateBoard } from "../functions";
+import { checkBoard, createBoard, updateBoard } from "../functions";
 
 const Board: React.FC = () => {
   const [currentPlayer, toggleCurrentPlayer] = useState("");
@@ -36,8 +36,10 @@ const Board: React.FC = () => {
 
   const handleTurn = (columnIndex: number) => {
     // update the board
-    updatePlaces(updateBoard(currentPlayer, columnIndex, places));
+    const newBoard = updateBoard(currentPlayer, columnIndex, places);
+    updatePlaces(newBoard);
     // check the new board
+    checkBoard(newBoard);
     // toggle player
     toggleCurrentPlayer(currentPlayer === player1 ? player2 : player1);
   };

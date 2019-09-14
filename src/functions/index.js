@@ -5,5 +5,6 @@
 export { colorTile } from "./colorTile";
 // export { checkForDraw } from "./checkForDraw";
 // export { checkForWin } from "./checkForWin";
+export { checkBoard } from "./checkBoard";
 export { createBoard } from "./createBoard";
 export { updateBoard } from "./updateBoard";
