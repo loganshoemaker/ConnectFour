@@ -9,9 +9,9 @@ const Column: React.SFC<columnProps> = props => {
       {props.column.map((row, rowIndex) => {
         return (
           <Tile
-            colorTile={() => colorTile(row.player)}
+            colorTile={() => colorTile(row)}
             key={`Tile${rowIndex}`}
-            player={row.player}
+            player={row}
           />
         );
       })}

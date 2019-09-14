@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { place } from "../models";
 import { Column, ColorSelect } from "./";
-import { checkForWin, checkForDraw, createBoard } from "../functions";
+import { createBoard, updateBoard } from "../functions";
 
 const Board: React.FC = () => {
   const [currentPlayer, toggleCurrentPlayer] = useState("");
@@ -36,23 +35,11 @@ const Board: React.FC = () => {
   };
 
   const handleTurn = (columnIndex: number) => {
+    // update the board
+    updatePlaces(updateBoard(currentPlayer, columnIndex, places));
+    // check the new board
+    // toggle player
     toggleCurrentPlayer(currentPlayer === player1 ? player2 : player1);
-    const findLastOpenTile = (column: Array<place>) => {
-      column.reverse();
-      const lastTileIndex = column.findIndex(tile => !tile.player);
-      if (lastTileIndex >= 0) {
-        column[lastTileIndex] = { player: currentPlayer };
-      }
-      column.reverse();
-      return column;
-    };
-    places[columnIndex] = findLastOpenTile(places[columnIndex]);
-    updatePlaces(places);
-    if (checkForWin(columnIndex, places)) {
-      setResult(currentPlayer);
-    } else if (checkForDraw(places)) {
-      setResult("draw");
-    }
   };
 
   if (!player1.length) {

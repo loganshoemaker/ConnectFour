@@ -1,6 +1,6 @@
-import { place } from "./place";
+// import { place } from "./place";
 
 export interface columnProps {
-  column: Array<place>;
+  column: Array<string>;
   onClick: any;
 }
