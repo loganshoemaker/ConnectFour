@@ -11,9 +11,9 @@ export const Board = () => {
 
     const availableSpots = () => {
         const available: number[][] = [];
-        for (let r = 0; r < 3; r++) {
-            for (let c = 0; c < 3; c++) {
-                available.push([r, c]);
+        for (let row = 0; row < emptyBoard.length; row++) {
+            for (let column = 0; column < emptyBoard[0].length; column++) {
+                available.push([row, column]);
             }
         }
 
@@ -25,10 +25,7 @@ export const Board = () => {
     const [winner, setWinner]: any = useState(false);
     const [available] = useState(availableSpots());
 
-    const checkForArrayEntry = (
-        arrayToBeChecked: number[][],
-        array: number[]
-    ) => {
+    const checkForArrayEntry = (arrayToBeChecked, array: number[]) => {
         for (let index = 0; index < arrayToBeChecked.length; index++) {
             if (
                 arrayToBeChecked[index][0] === array[0] &&
@@ -40,7 +37,7 @@ export const Board = () => {
         return -1;
     };
 
-    const makeTurn = (place: number[]) => {
+    const takeATurn = (place: number[]) => {
         const indexOfPlace = checkForArrayEntry(available, place);
         if (indexOfPlace >= 0) {
             available.splice(indexOfPlace, 1);
@@ -62,22 +59,35 @@ export const Board = () => {
         return;
     };
 
-    const checkForWinner = (newBoard: string[][]) => {
+    // TODO do this with 5x5 grid, checking for 4 in a row
+    const checkForWinner = (boardToCheck: typeof emptyBoard) => {
         for (let row = 0; row < 3; row++) {
-            checkEquality(newBoard[row][0], newBoard[row][1], newBoard[row][2]);
+            checkEquality(
+                boardToCheck[row][0],
+                boardToCheck[row][1],
+                boardToCheck[row][2]
+            );
         }
 
         for (let column = 0; column < 3; column++) {
             checkEquality(
-                newBoard[0][column],
-                newBoard[1][column],
-                newBoard[2][column]
+                boardToCheck[0][column],
+                boardToCheck[1][column],
+                boardToCheck[2][column]
             );
         }
 
-        checkEquality(newBoard[0][0], newBoard[1][1], newBoard[2][2]);
+        checkEquality(
+            boardToCheck[0][0],
+            boardToCheck[1][1],
+            boardToCheck[2][2]
+        );
 
-        checkEquality(newBoard[2][0], newBoard[1][1], newBoard[0][2]);
+        checkEquality(
+            boardToCheck[2][0],
+            boardToCheck[1][1],
+            boardToCheck[0][2]
+        );
     };
 
     const renderBoard = () =>
@@ -88,7 +98,7 @@ export const Board = () => {
                         <div
                             key={`board-column-${columnIndex}`}
                             onClick={() =>
-                                !winner && makeTurn([rowIndex, columnIndex])
+                                !winner && takeATurn([rowIndex, columnIndex])
                             }
                             style={{
                                 width: "50px",
