@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { Board } from "./components";
+import { Board } from "./components/TicTacToe/Board";
 
 const App: React.FC = () => {
   return (
