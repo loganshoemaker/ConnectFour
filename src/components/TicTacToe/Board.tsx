@@ -3,6 +3,8 @@ import * as React from "react";
 export const Board = () => {
     const { useState } = React;
 
+    // connect 4 is on a 6x7 grid
+
     const emptyBoard: string[][] = [
         ["", "", ""],
         ["", "", ""],
@@ -38,20 +40,19 @@ export const Board = () => {
 
     const checkEquality = (a: string, b: string, c: string) => {
         if (a !== "" && a === b && b === c) {
-            setWinner(currentPlayer);
+            return true;
         }
 
         return;
     };
 
     const checkForWinner = (boardToCheck: typeof emptyBoard) => {
-        console.log("inside checkForWInner");
         for (let row = 0; row < 3; row++) {
             checkEquality(
                 boardToCheck[row][0],
                 boardToCheck[row][1],
                 boardToCheck[row][2]
-            );
+            ) && setWinner(currentPlayer);
         }
 
         for (let column = 0; column < 3; column++) {
@@ -59,20 +60,20 @@ export const Board = () => {
                 boardToCheck[0][column],
                 boardToCheck[1][column],
                 boardToCheck[2][column]
-            );
+            ) && setWinner(currentPlayer);
         }
 
         checkEquality(
             boardToCheck[0][0],
             boardToCheck[1][1],
             boardToCheck[2][2]
-        );
+        ) && setWinner(currentPlayer);
 
         checkEquality(
             boardToCheck[2][0],
             boardToCheck[1][1],
             boardToCheck[0][2]
-        );
+        ) && setWinner(currentPlayer);
     };
 
     const renderBoard = () =>
@@ -82,7 +83,7 @@ export const Board = () => {
                     {row.map((column, columnIndex) => (
                         <div
                             key={`board-column-${columnIndex}`}
-                            onClick={() => takeATurn(columnIndex)
+                            onClick={() => !winner && takeATurn(columnIndex)
                             }
                             style={{
                                 width: "50px",
