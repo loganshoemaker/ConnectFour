@@ -9,46 +9,31 @@ export const Board = () => {
         ["", "", ""],
     ];
 
-    const availableSpots = () => {
-        const available: number[][] = [];
-        for (let row = 0; row < emptyBoard.length; row++) {
-            for (let column = 0; column < emptyBoard[0].length; column++) {
-                available.push([row, column]);
-            }
-        }
-
-        return available;
-    };
-
     const [board, updateBoard] = useState(emptyBoard);
     const [currentPlayer, switchPlayer] = useState("x");
     const [winner, setWinner]: any = useState(false);
-    const [available] = useState(availableSpots());
 
-    const checkForArrayEntry = (arrayToBeChecked, array: number[]) => {
-        for (let index = 0; index < arrayToBeChecked.length; index++) {
-            if (
-                arrayToBeChecked[index][0] === array[0] &&
-                arrayToBeChecked[index][1] === array[1]
-            ) {
-                return index;
+    const placeSpotInColumn = (columnIndex: number) => {
+        for (let index = board.length - 1; index >= 0; index--) {
+            if(board[index][columnIndex] === "") {
+                const updatedBoard = [...board];
+                updatedBoard[index][columnIndex] = currentPlayer;
+                
+                return updatedBoard;
             }
         }
-        return -1;
     };
 
-    const takeATurn = (place: number[]) => {
-        const indexOfPlace = checkForArrayEntry(available, place);
-        if (indexOfPlace >= 0) {
-            available.splice(indexOfPlace, 1);
-            const newBoard = [...board];
-            newBoard[place[0]][place[1]] = currentPlayer;
+    const takeATurn = (columnIndex: number) => {
+        const newBoard = placeSpotInColumn(columnIndex)
+            
+        if(newBoard) {
             checkForWinner(newBoard);
-            if (!winner) {
-                switchPlayer(currentPlayer === "x" ? "o" : "x");
-                updateBoard(newBoard);
-            }
+            switchPlayer(currentPlayer === "x" ? "o" : "x");
+            updateBoard(newBoard);
         }
+
+        return;
     };
 
     const checkEquality = (a: string, b: string, c: string) => {
@@ -59,8 +44,8 @@ export const Board = () => {
         return;
     };
 
-    // TODO do this with 5x5 grid, checking for 4 in a row
     const checkForWinner = (boardToCheck: typeof emptyBoard) => {
+        console.log("inside checkForWInner");
         for (let row = 0; row < 3; row++) {
             checkEquality(
                 boardToCheck[row][0],
@@ -97,8 +82,7 @@ export const Board = () => {
                     {row.map((column, columnIndex) => (
                         <div
                             key={`board-column-${columnIndex}`}
-                            onClick={() =>
-                                !winner && takeATurn([rowIndex, columnIndex])
+                            onClick={() => takeATurn(columnIndex)
                             }
                             style={{
                                 width: "50px",
@@ -120,8 +104,8 @@ export const Board = () => {
 
     return (
         <>
-            {winner && <h1>{winner} Wins!</h1>}
             <div>{renderBoard()}</div>
+            {winner && <h1>{winner} Wins!</h1>}
         </>
     );
 };
