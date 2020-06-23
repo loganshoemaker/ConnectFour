@@ -68,11 +68,18 @@ export const Board = () => {
         }
 
         // check left down
+        for(let row = 0; row < board.length - 2; row ++) {
+            for (let column = 0; column < board[0].length -2; column ++) {
+                checkEquality(
+                    boardToCheck[row][column],
+                    boardToCheck[row + 1][column + 1],
+                    boardToCheck[row+ 2][column + 2]
+                ) && setWinner(currentPlayer);
+            }
+        }
 
         // check left up
-        console.log("board length: ", board.length); // 3
-        console.log("column length: ", board[0].length); // 4
-        for (let row = board.length - 1; row > 1; row --) {
+        for (let row = board.length - 1; row >= 2; row --) {
             for (let column = 0; column <= 1; column ++) {
                 checkEquality(
                     boardToCheck[row][column],
