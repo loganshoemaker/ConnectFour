@@ -38,13 +38,11 @@ export const Board = () => {
         return;
     };
 
-    const checkEquality = (a: string, b: string, c: string) => {
-        if (a !== "" && a === b && b === c) {
-            return true;
-        }
-
-        return;
-    };
+    const checkEquality = (a: string, b: string, c: string) => (
+        a !== "" &&
+        a === b &&
+        b === c
+    )
 
     const checkForWinner = (boardToCheck: typeof emptyBoard) => {
         for (let row = 0; row < 3; row++) {
