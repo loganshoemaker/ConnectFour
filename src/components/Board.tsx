@@ -70,20 +70,17 @@ export const Board = () => {
         // check left down
 
         // check left up
-
-
-        
-        // checkEquality(
-        //     boardToCheck[0][0],
-        //     boardToCheck[1][1],
-        //     boardToCheck[2][2]
-        // ) && setWinner(currentPlayer);
-
-        // checkEquality(
-        //     boardToCheck[2][0],
-        //     boardToCheck[1][1],
-        //     boardToCheck[0][2]
-        // ) && setWinner(currentPlayer);
+        console.log("board length: ", board.length); // 3
+        console.log("column length: ", board[0].length); // 4
+        for (let row = board.length - 1; row > 1; row --) {
+            for (let column = 0; column <= 1; column ++) {
+                checkEquality(
+                    boardToCheck[row][column],
+                    boardToCheck[row - 1][column + 1],
+                    boardToCheck[row - 2][column + 2]
+                ) && setWinner(currentPlayer);
+            }
+        }
     };
 
     const renderBoard = () =>
