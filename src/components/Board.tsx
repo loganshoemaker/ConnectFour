@@ -1,29 +1,40 @@
 import * as React from "react";
 
+const createEmptyBoard = (grid: {rows: number, columns: number}) => {
+    const {rows, columns} = grid;
+    const emptyArray: string[][] = [];
+
+    for(let row = 0; row < rows; row ++) {
+        emptyArray[row] = [];
+        for(let column = 0; column < columns; column ++) {
+            emptyArray[row][column] = "";
+        }
+    }
+
+    return emptyArray;
+}
+
 export const Board = () => {
     const { useState } = React;
+    
+    const newBoard = createEmptyBoard({rows: 6, columns: 7});
 
-    // connect 4 is on a 6x7 grid
-
-    const emptyBoard: string[][] = [
-        ["", "", "", ""],
-        ["", "", "", ""],
-        ["", "", "", ""],
-    ];
-
-    const [board, updateBoard] = useState(emptyBoard);
+    const [board, updateBoard] = useState(newBoard);
     const [currentPlayer, switchPlayer] = useState("x");
     const [winner, setWinner]: any = useState(false);
 
     const placeSpotInColumn = (columnIndex: number) => {
+        const updatedBoard = [...board];
+
         for (let index = board.length - 1; index >= 0; index--) {
             if(board[index][columnIndex] === "") {
-                const updatedBoard = [...board];
                 updatedBoard[index][columnIndex] = currentPlayer;
                 
-                return updatedBoard;
+                break;
             }
         }
+
+        return updatedBoard;
     };
 
     const takeATurn = (columnIndex: number) => {
@@ -38,20 +49,27 @@ export const Board = () => {
         return;
     };
 
-    const checkEquality = (a: string, b: string, c: string) => (
+    const checkEquality = (a: string, b: string, c: string, d: string) => (
         a !== "" &&
         a === b &&
-        b === c
+        b === c &&
+        c === d
     )
 
-    const checkForWinner = (boardToCheck: typeof emptyBoard) => {
+    const handleReset = () => {
+        updateBoard(newBoard);
+        setWinner(false);
+    }
+
+    const checkForWinner = (boardToCheck: typeof board) => {
         // check vertical
-        for (let row = 0; row < board.length - 2; row++) {
+        for (let row = 0; row < board.length - 3; row++) {
             for(let column = 0; column < board[0].length; column ++) {
                 checkEquality(
                     boardToCheck[row][column],
                     boardToCheck[row + 1][column],
-                    boardToCheck[row + 2][column]
+                    boardToCheck[row + 2][column],
+                    boardToCheck[row + 3][column]
                 ) && setWinner(currentPlayer);
             }
         }
@@ -62,29 +80,32 @@ export const Board = () => {
                 checkEquality(
                     boardToCheck[row][column],
                     boardToCheck[row][column + 1],
-                    boardToCheck[row][column + 2]
+                    boardToCheck[row][column + 2],
+                    boardToCheck[row][column + 3]
                 ) && setWinner(currentPlayer);
             }
         }
 
         // check left down
-        for(let row = 0; row < board.length - 2; row ++) {
+        for(let row = 0; row < board.length - 3; row ++) {
             for (let column = 0; column < board[0].length -2; column ++) {
                 checkEquality(
                     boardToCheck[row][column],
                     boardToCheck[row + 1][column + 1],
-                    boardToCheck[row+ 2][column + 2]
+                    boardToCheck[row + 2][column + 2],
+                    boardToCheck[row + 3][column + 3]
                 ) && setWinner(currentPlayer);
             }
         }
 
         // check left up
-        for (let row = board.length - 1; row >= 2; row --) {
+        for (let row = board.length - 1; row >= 3; row --) {
             for (let column = 0; column <= 1; column ++) {
                 checkEquality(
                     boardToCheck[row][column],
                     boardToCheck[row - 1][column + 1],
-                    boardToCheck[row - 2][column + 2]
+                    boardToCheck[row - 2][column + 2],
+                    boardToCheck[row - 3][column + 3]
                 ) && setWinner(currentPlayer);
             }
         }
@@ -116,11 +137,11 @@ export const Board = () => {
                 </div>
             );
         });
-
+        
     return (
         <>
             <div>{renderBoard()}</div>
-            {winner && <h1>{winner} Wins!</h1>}
+            {winner && <><h1>{winner} Wins!</h1><button onClick={() => handleReset()}>Play Again?</button></>}
         </>
     );
 };
