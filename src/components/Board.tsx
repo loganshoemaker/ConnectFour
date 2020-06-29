@@ -127,6 +127,7 @@ export const Board = () => {
                                 color: "white",
                                 background: "gray",
                                 border: "1px solid #fff",
+                                textAlign: "center",
                             }}
                         >
                             <span style={{ position: "absolute" }}>
