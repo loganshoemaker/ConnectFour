@@ -2,14 +2,19 @@ import * as React from "react";
 
 const createEmptyBoard = (grid: {rows: number, columns: number}) => {
     const {rows, columns} = grid;
-    const emptyArray: string[][] = [];
+    // THE COMMENTED CODE BELOW WORKS
+    // const emptyArray: string[][] = [];
 
-    for(let row = 0; row < rows; row ++) {
-        emptyArray[row] = [];
-        for(let column = 0; column < columns; column ++) {
-            emptyArray[row][column] = "";
-        }
-    }
+    // for(let row = 0; row < rows; row ++) {
+    //     emptyArray[row] = [];
+    //     for(let column = 0; column < columns; column ++) {
+    //         emptyArray[row][column] = "";
+    //     }
+    // }
+
+    // THE BELOW CODE BREAKS, TEST RUNNING APP AND CLICKING SPACE
+    const emptyArray: string[][] = new Array(rows);
+    emptyArray.fill(new Array(columns).fill("", 0, columns));
 
     return emptyArray;
 }
