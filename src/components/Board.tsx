@@ -1,75 +1,147 @@
-import React, { useState, useEffect } from "react";
-import { Column, ColorSelect } from "./";
-import { checkBoard, createBoard, updateBoard } from "../functions";
+import * as React from "react";
 
-const Board: React.FC = () => {
-  const [currentPlayer, toggleCurrentPlayer] = useState("");
-  const [player1, setPlayer1] = useState("");
-  const [player2, setPlayer2] = useState("");
-  const [places, updatePlaces] = useState(createBoard());
-  const [result, setResult] = useState("");
+const createEmptyBoard = (grid: {rows: number, columns: number}) => {
+    const {rows, columns} = grid;
+    const emptyArray: string[][] = [];
 
-  const resetState = () => {
-    setPlayer1("");
-    setPlayer2("");
-    toggleCurrentPlayer("");
-    setResult("");
-    updatePlaces(createBoard());
-  };
-
-  useEffect(() => {
-    if (result.length && (result === player1 || result === player2)) {
-      alert(`${result} wins!`);
-      resetState();
+    for(let row = 0; row < rows; row ++) {
+        emptyArray[row] = [];
+        for(let column = 0; column < columns; column ++) {
+            emptyArray[row][column] = "";
+        }
     }
-    if (result === "draw") {
-      alert("Tie game!");
-      resetState();
+
+    return emptyArray;
+}
+
+export const Board = () => {
+    const { useState } = React;
+    
+    const newBoard = createEmptyBoard({rows: 6, columns: 7});
+
+    const [board, updateBoard] = useState(newBoard);
+    const [currentPlayer, switchPlayer] = useState("x");
+    const [winner, setWinner]: any = useState(false);
+
+    const placeSpotInColumn = (columnIndex: number) => {
+        const updatedBoard = [...board];
+
+        for (let index = board.length - 1; index >= 0; index--) {
+            if(board[index][columnIndex] === "") {
+                updatedBoard[index][columnIndex] = currentPlayer;
+                
+                break;
+            }
+        }
+
+        return updatedBoard;
+    };
+
+    const takeATurn = (columnIndex: number) => {
+        const newBoard = placeSpotInColumn(columnIndex)
+            
+        if(newBoard) {
+            checkForWinner(newBoard);
+            switchPlayer(currentPlayer === "x" ? "o" : "x");
+            updateBoard(newBoard);
+        }
+
+        return;
+    };
+
+    const checkEquality = (a: string, b: string, c: string, d: string) => (
+        a !== "" &&
+        a === b &&
+        b === c &&
+        c === d
+    )
+
+    const handleReset = () => {
+        updateBoard(newBoard);
+        setWinner(false);
     }
-  });
 
-  const setPlayerColors = (player1Color: string, player2Color: string) => {
-    setPlayer1(player1Color);
-    toggleCurrentPlayer(player1Color);
-    setPlayer2(player2Color);
-  };
+    const checkForWinner = (boardToCheck: typeof board) => {
+        // check vertical
+        for (let row = 0; row < board.length - 3; row++) {
+            for(let column = 0; column < board[0].length; column ++) {
+                checkEquality(
+                    boardToCheck[row][column],
+                    boardToCheck[row + 1][column],
+                    boardToCheck[row + 2][column],
+                    boardToCheck[row + 3][column]
+                ) && setWinner(currentPlayer);
+            }
+        }
 
-  const handleTurn = (columnIndex: number) => {
-    // update the board
-    const newBoard = updateBoard(currentPlayer, columnIndex, places);
-    updatePlaces(newBoard);
-    // check the new board
-    checkBoard(newBoard);
-    // toggle player
-    toggleCurrentPlayer(currentPlayer === player1 ? player2 : player1);
-  };
+        // check horizontal
+        for (let row = 0; row < board.length; row ++) {
+            for (let column = 0; column < board[0].length; column ++) {
+                checkEquality(
+                    boardToCheck[row][column],
+                    boardToCheck[row][column + 1],
+                    boardToCheck[row][column + 2],
+                    boardToCheck[row][column + 3]
+                ) && setWinner(currentPlayer);
+            }
+        }
 
-  if (!player1.length) {
+        // check left down
+        for(let row = 0; row < board.length - 3; row ++) {
+            for (let column = 0; column < board[0].length -2; column ++) {
+                checkEquality(
+                    boardToCheck[row][column],
+                    boardToCheck[row + 1][column + 1],
+                    boardToCheck[row + 2][column + 2],
+                    boardToCheck[row + 3][column + 3]
+                ) && setWinner(currentPlayer);
+            }
+        }
+
+        // check left up
+        for (let row = board.length - 1; row >= 3; row --) {
+            for (let column = 0; column <= 1; column ++) {
+                checkEquality(
+                    boardToCheck[row][column],
+                    boardToCheck[row - 1][column + 1],
+                    boardToCheck[row - 2][column + 2],
+                    boardToCheck[row - 3][column + 3]
+                ) && setWinner(currentPlayer);
+            }
+        }
+    };
+
+    const renderBoard = () =>
+        board.map((row, rowIndex) => {
+            return (
+                <div key={`board-row-${rowIndex}`}>
+                    {row.map((column, columnIndex) => (
+                        <div
+                            key={`board-column-${columnIndex}`}
+                            onClick={() => !winner && takeATurn(columnIndex)
+                            }
+                            style={{
+                                width: "50px",
+                                height: "50px",
+                                display: "inline-block",
+                                color: "white",
+                                background: "gray",
+                                border: "1px solid #fff",
+                            }}
+                        >
+                            <span style={{ position: "absolute" }}>
+                                {column}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            );
+        });
+        
     return (
-      <ColorSelect
-        colorOption1="RED"
-        colorOption2="BLACK"
-        setPlayerColors={setPlayerColors}
-      />
+        <>
+            <div>{renderBoard()}</div>
+            {winner && <><h1>{winner} Wins!</h1><button onClick={() => handleReset()}>Play Again?</button></>}
+        </>
     );
-  }
-
-  return (
-    <div>
-      <h1>{currentPlayer} PLAYER - TAKE TURN</h1>
-      <div className="board">
-        {places.map((column, columnIndex) => {
-          return (
-            <Column
-              column={column}
-              onClick={() => handleTurn(columnIndex)}
-              key={`row${columnIndex}`}
-            />
-          );
-        })}
-      </div>
-    </div>
-  );
 };
-
-export default Board;
